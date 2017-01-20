@@ -1,0 +1,47 @@
+Concept:
+A very light-weight command-line parser.  Takes arguments in either a String or String[] form, returns a class instance holding the arguments in a map, and the parameters in a list.
+
+Requirements:
+1) Takes an arbitrary String or String[] (i.e. doesn't use the arguments from the command line)
+2) Takes arguments in a similar format to getopt (the GNU enhanced version); specifically: 
+3) Multiple single-letter options can be joined (e.g. -a -b -c to -abc)
+4) Supports long options (e.g. --message="Hello!") (though it doesn't have to support single-dash long options)
+5) Assumes all non-option-like bits at the end are parameters to be passed normally (e.g. -abc --long="Hello!" param1 param2 tells me that the parameters are param1 and param2)
+6) -- can be used to separate options from arguments (e.g. -ab --custom="hello" -- -file_starting_with_hyphen -another gives me the options/flags a, b, and custom with the appropriate values, and tells me that the arguments are -file_starting_with_hyphen and -another)
+7) Whitespace can be part of arguments, if it's quoted.
+8) An option name followed by a value is parsed as the option having that value (e.g. -h foo says that there is an option, h, with a value, foo)
+
+9) Entirely cross-platform
+10) Doesn't need me to specify which options I'm looking for (i.e. I pass it a String or String[] and it tells me which flags/options were set, as opposed to it looking for the options I want to set and assuming the rest are arguments)
+11) Free (as in beer)
+12) Can be legally used in any project (i.e. not noncommercial, not GPL)
+
+Ideal, but not necessary:
+13) Small -- one file
+14) Minimal copyright license (Not copyleft -- I like not worrying about legal issues, and I hate people trying to tell me that I can't use my work, however, I damned well, please)
+15) Uses the built-in interfaces (java.util.Map, specifically) to return data. (This is so I can write my own function more easily later)
+16) Open source
+
+
+1) Takes an arbitrary String or String[] (i.e. doesn't use the arguments from the command line)
+2) Works mostly like getopt (the GNU enhanced version) (except for the need to pre-specify the possible arguments).
+2A) Multiple single-letter options can be joined (e.g. -a -b -c to -abc)
+2B) Supports long options (e.g. --message="Hello!")
+2C) Assumes all non-option-like bits at the end are parameters to be passed normally (e.g. -abc --long="Hello!" param1 param2 tells me that the parameters are param1 and param2)
+2D) The two-character string "--" can be used to separate options from arguments (e.g. -ab="hello" -- -file_starting_with_hyphen -another gives me the options/flags a, b, and custom with the appropriate values, and tells me that the arguments are -file_starting_with_hyphen and -another)
+2E) Whitespace is allowed in arguments 
+
+3) Entirely cross-platform
+4) Doesn't need me to specify which options I'm looking for (i.e. I pass it a String or String[] and it tells me which flags/options were set, as opposed to it looking for the options I want to set and assuming the rest are arguments)
+5) Free (as in beer)
+6) Can be legally used in any project (i.e. not noncommercial)
+
+
+TODO:
+Currently 
+
+
+Limitations:
+- This is intentionally a stripped-down command-line parser. If you want more sophistication (like being able to include type conversion and checking, mandatory arguments, etc), use one of the several other alternative packages:
+- - args4j
+- - the gnome port of getopt 
