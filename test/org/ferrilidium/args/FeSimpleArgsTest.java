@@ -10,6 +10,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.ferrilidium.args.FeSimpleArgs.ParseState;
+import org.ferrilidium.args.FeSimpleArgs.Result;
 import org.junit.Test;
 
 /*****************************************************************
@@ -42,28 +43,28 @@ public class FeSimpleArgsTest {
 	}
 	// 1) Takes an arbitrary String or String[] (i.e. doesn't use the arguments from the command line)
 	@Test public void testParseAsString() {
-		testParse ("-def --GHI -abc=fred", FeSimpleArgs.makeResult (makeMap (new String[] {"a", null, "b", null, "c", "fred", "d", null, "e", null, "f", null, "GHI", null}), null));
+		testParse ("-def --GHI -abc=fred", makeResult (makeMap (new String[] {"a", null, "b", null, "c", "fred", "d", null, "e", null, "f", null, "GHI", null}), null));
 	}
 	// 1) Takes an arbitrary String or String[] (i.e. doesn't use the arguments from the command line)
 	@Test public void testParseFromTokens() {
-		testParse (new String[] {"-def", "param1", "--GHI", "-a", "param2", "-b", "-c=fred", "param3"}, FeSimpleArgs.makeResult (makeMap (new String[] {"a", null, "b", null, "c", "fred", "d", null, "e", null, "f", null, "GHI", null}), makeList (new String[] {"param1", "param2", "param3"})));
+		testParse (new String[] {"-def", "param1", "--GHI", "-a", "param2", "-b", "-c=fred", "param3"}, makeResult (makeMap (new String[] {"a", null, "b", null, "c", "fred", "d", null, "e", null, "f", null, "GHI", null}), makeList (new String[] {"param1", "param2", "param3"})));
 	}
 	@Test public void testParse() {
-		testParse ("-def --GHI -a -b -c=fred", FeSimpleArgs.makeResult (makeMap (new String[] {"a", null, "b", null, "c", "fred", "d", null, "e", null, "f", null, "GHI", null}), null));
-		testParse ("-def param1 --GHI -a param2 -b -c=fred -- param3", FeSimpleArgs.makeResult (makeMap (new String[] {"a", null, "b", null, "c", "fred", "d", null, "e", null, "f", null, "GHI", null}), makeList (new String[] {"param1", "param2", "param3"})));
-		testParse ("-def param1 --GHI -a param2 -b -c=fred param3", FeSimpleArgs.makeResult (makeMap (new String[] {"a", null, "b", null, "c", "fred", "d", null, "e", null, "f", null, "GHI", null}), makeList (new String[] {"param1", "param2", "param3"})));
-		testParse (new String[] {"-def", "param1", "--GHI", "-a", "param2", "-b", "-c=fred", "param3"}, FeSimpleArgs.makeResult (makeMap (new String[] {"a", null, "b", null, "c", "fred", "d", null, "e", null, "f", null, "GHI", null}), makeList (new String[] {"param1", "param2", "param3"})));
+		testParse ("-def --GHI -a -b -c=fred", makeResult (makeMap (new String[] {"a", null, "b", null, "c", "fred", "d", null, "e", null, "f", null, "GHI", null}), null));
+		testParse ("-def param1 --GHI -a param2 -b -c=fred -- param3", makeResult (makeMap (new String[] {"a", null, "b", null, "c", "fred", "d", null, "e", null, "f", null, "GHI", null}), makeList (new String[] {"param1", "param2", "param3"})));
+		testParse ("-def param1 --GHI -a param2 -b -c=fred param3", makeResult (makeMap (new String[] {"a", null, "b", null, "c", "fred", "d", null, "e", null, "f", null, "GHI", null}), makeList (new String[] {"param1", "param2", "param3"})));
+		testParse (new String[] {"-def", "param1", "--GHI", "-a", "param2", "-b", "-c=fred", "param3"}, makeResult (makeMap (new String[] {"a", null, "b", null, "c", "fred", "d", null, "e", null, "f", null, "GHI", null}), makeList (new String[] {"param1", "param2", "param3"})));
 	}
 	
 		// suppressStandardOutput=false;
 	@Test public void testParseValueWithQuotesFromArray() {
 		String[] cliAsTokens = new String[] {"-n=\"foo bar baz\""};
-		FeSimpleArgs.Result expected = FeSimpleArgs.makeResult(makeMap(new String[]{"n", "foo bar baz"}), null);
+		FeSimpleArgs.Result expected = makeResult(makeMap(new String[]{"n", "foo bar baz"}), null);
 		testParse (cliAsTokens, expected);
 	}
 	@Test public void testParseValueWithQuotesFromString() {
 		String cliAsString = "-n=\"foo bar baz\"";
-		FeSimpleArgs.Result expected = FeSimpleArgs.makeResult(makeMap(new String[]{"n", "foo bar baz"}), null);
+		FeSimpleArgs.Result expected = makeResult(makeMap(new String[]{"n", "foo bar baz"}), null);
 		testParse (cliAsString, expected);
 	}
 	
@@ -81,7 +82,7 @@ public class FeSimpleArgsTest {
 	// 2A) Multiple single-letter options can be joined (e.g. -a -b -c to -abc)
 	@Test public void test_A_B_C_Same_As_ABC() {
 		FeSimpleArgs parser = new FeSimpleArgs();
-		FeSimpleArgs.Result expected = FeSimpleArgs.makeResult(makeMap(new String[]{"a", null, "b", null, "c", null}), null);
+		FeSimpleArgs.Result expected = makeResult(makeMap(new String[]{"a", null, "b", null, "c", null}), null);
 		FeSimpleArgs.Result res1 = parser.parse("-abc");
 		assertEqual ("testA_B_C_same_as_ABC", res1, expected);
 		FeSimpleArgs.Result res2 = parser.parse("-a -b -c");
@@ -90,7 +91,7 @@ public class FeSimpleArgsTest {
 	}
 	@Test public void test_A_B_CValue_Same_As_ABCValue() {
 		FeSimpleArgs parser = new FeSimpleArgs();
-		FeSimpleArgs.Result expected = FeSimpleArgs.makeResult(makeMap(new String[]{"a", null, "b", null, "c", "Value"}), null);
+		FeSimpleArgs.Result expected = makeResult(makeMap(new String[]{"a", null, "b", null, "c", "Value"}), null);
 		FeSimpleArgs.Result res1 = parser.parse("-abc=Value");
 		assertEqual ("testA_B_Cvalue_same_as_ABCvalue", res1, expected);
 		FeSimpleArgs.Result res2 = parser.parse("-a -b -c=Value");
@@ -100,7 +101,7 @@ public class FeSimpleArgsTest {
 	// 2B) Supports long options (e.g. --message="Hello!")
 	@Test public void testLongArgs() {
 		FeSimpleArgs parser = new FeSimpleArgs();
-		FeSimpleArgs.Result expected = FeSimpleArgs.makeResult(makeMap(new String[]{"message", "Hello!"}), null);
+		FeSimpleArgs.Result expected = makeResult(makeMap(new String[]{"message", "Hello!"}), null);
 		FeSimpleArgs.Result res1 = parser.parse("--message=Hello!");
 		assertEqual ("testLongArgs", res1, expected);
 	}
@@ -108,7 +109,7 @@ public class FeSimpleArgsTest {
 	// 2C) Assumes all non-option-like bits at the end are parameters to be passed normally (e.g. -abc --long="Hello!" param1 param2 tells me that the parameters are param1 and param2)
 	@Test public void testNonOptionLikeBitsAtEndAreParametersToBePassedNormally() {
 		FeSimpleArgs parser = new FeSimpleArgs();
-		FeSimpleArgs.Result expected = FeSimpleArgs.makeResult(makeMap(new String[]{"message", "Hello!", "a", null, "b", null, "c", null}), makeList(new String[] {"param1", "param2"}));
+		FeSimpleArgs.Result expected = makeResult(makeMap(new String[]{"message", "Hello!", "a", null, "b", null, "c", null}), makeList(new String[] {"param1", "param2"}));
 		FeSimpleArgs.Result res1 = parser.parse("-abc --message=\"Hello!\" param1 param2");
 		assertEqual ("testNonOptionLikeParams", res1, expected);
 	}
@@ -116,7 +117,7 @@ public class FeSimpleArgsTest {
 	// 2D) -- can be used to separate options from arguments (e.g. -ab --custom="hello" -- -file_starting_with_hyphen -another gives me the options/flags a, b, and custom with the appropriate values, and tells me that the arguments are -file_starting_with_hyphen and -another)
 	@Test public void testDashDashSeparatesParameters() {
 		FeSimpleArgs parser = new FeSimpleArgs();
-		FeSimpleArgs.Result expected = FeSimpleArgs.makeResult(makeMap(new String[]{"message", "Hello!"}), makeList(new String[]{"-foo", "-bar"}));
+		FeSimpleArgs.Result expected = makeResult(makeMap(new String[]{"message", "Hello!"}), makeList(new String[]{"-foo", "-bar"}));
 		FeSimpleArgs.Result res1 = parser.parse("--message=\"Hello!\" -- -foo -bar");
 		assertEqual ("testDashdashParams", res1, expected);
 	}
@@ -125,19 +126,19 @@ public class FeSimpleArgsTest {
 	// 3) Whitespace is allowed in arguments
 	@Test public void testWhitespace1() {   
 		FeSimpleArgs parser = new FeSimpleArgs();
-		FeSimpleArgs.Result expected = FeSimpleArgs.makeResult(makeMap(new String[]{"a", null, "b", null, "c", "Value"}), null);
+		FeSimpleArgs.Result expected = makeResult(makeMap(new String[]{"a", null, "b", null, "c", "Value"}), null);
 		FeSimpleArgs.Result res = parser.parse("  -abc  =  Value  ");
 		assertEqual ("testWhitespace1", res, expected);
 	}
 	@Test public void testWhitespace2() {   
 		FeSimpleArgs parser = new FeSimpleArgs();
-		FeSimpleArgs.Result expected = FeSimpleArgs.makeResult(makeMap(new String[]{"a", null, "b", null, "c", "Value"}), null);
+		FeSimpleArgs.Result expected = makeResult(makeMap(new String[]{"a", null, "b", null, "c", "Value"}), null);
 		FeSimpleArgs.Result res = parser.parse(new String[] {"  -abc ", " =  ", " Value  "});
 		assertEqual ("testWhitespace2", res, expected);
 	}
 	@Test public void testWhitespace3() {   
 		FeSimpleArgs parser = new FeSimpleArgs();
-		FeSimpleArgs.Result expected = FeSimpleArgs.makeResult(makeMap(new String[]{"n", "foo bar baz"}), null);
+		FeSimpleArgs.Result expected = makeResult(makeMap(new String[]{"n", "foo bar baz"}), null);
 		//FeSimpleArgs.Result res = parser.parse(new String[] {"-n \"foo bar baz\""});
 		FeSimpleArgs.Result res = parser.parse("-n=\"foo bar baz\"");
 		assertEqual ("testWhitespace3", res, expected);
@@ -406,5 +407,9 @@ public class FeSimpleArgsTest {
 
 	}
 
+	public static Result makeResult(Map<String, String> args, List<String> params) {
+		Result ret = new Result(args, params);
+		return ret;
+	}	
 }
 
